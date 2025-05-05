@@ -1,0 +1,7 @@
+Flask
+openai
+python-dotenv
+chromadb
+pandas
+werkzeug
+boto3
