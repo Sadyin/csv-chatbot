@@ -6,6 +6,8 @@ import os
 
 class ChromaHelper:
     def __init__(self):
+        os.makedirs("./chroma_db", exist_ok=True)  # Ensure directory exists
+
         self.client = chromadb.PersistentClient(path="./chroma_db")
         self.openai_ef = embedding_functions.OpenAIEmbeddingFunction(
             api_key=os.getenv("OPENAI_API_KEY"),
@@ -18,7 +20,10 @@ class ChromaHelper:
 
     def ingest_csv(self, csv_path):
         try:
-            self.collection.delete(where={})  # ✅ Clear all old vectors
+            # ✅ Delete all existing documents before ingesting new ones
+            all_ids = self.collection.get()["ids"]
+            if all_ids:
+                self.collection.delete(ids=all_ids)
 
             df = pd.read_csv(csv_path)
             documents, metadatas, ids = [], [], []
