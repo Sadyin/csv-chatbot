@@ -18,6 +18,8 @@ class ChromaHelper:
 
     def ingest_csv(self, csv_path):
         try:
+            self.collection.delete(where={})  # ✅ Clear all old vectors
+
             df = pd.read_csv(csv_path)
             documents, metadatas, ids = [], [], []
 
